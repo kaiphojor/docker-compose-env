@@ -1,0 +1,18 @@
+version: '3'
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules  # 로컬 node_modules 충돌 방지
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # 파일 변경 감지 강제 활성화
+      - CHOKIDAR_INTERVAL=100  # (선택) 폴링 간격(ms) 조정
+      - WATCHPACK_POLLING=true
+      - WDS_SOCKET_PORT=0  # WSL 2 네트워크 문제 해결
+    stdin_open: true  # 터미널 상호작용 활성화 (선택)
+    tty: true         # 터미널 출력 개선 (선택)
