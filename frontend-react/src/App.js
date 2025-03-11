@@ -1,16 +1,16 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
-import React, { useEffect } from 'react';
-import axios from 'axios';
+// import React, { useEffect } from 'react';
+// import axios from 'axios';
 import Example from './Example';
 import DbConnectExample from './DbConnectExample';
 
 function App() {
-  useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/`)
-      .then(response => console.log(response.data))
-      .catch(error => console.error('API 호출 실패:', error));
-  }, []);
+  // useEffect(() => {
+  //   axios.get(`${process.env.REACT_APP_API_URL}/`)
+  //     .then(response => console.log(response.data))
+  //     .catch(error => console.error('API 호출 실패:', error));
+  // }, []);
   return (
     <div className="App">
       <header className="App-header">
@@ -28,7 +28,7 @@ function App() {
         Learn something..
         </a>
         <Example></Example>
-        {/* <DbConnectExample></DbConnectExample> */}
+        <DbConnectExample></DbConnectExample>
       </header>
     </div>
   );
