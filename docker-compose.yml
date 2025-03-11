@@ -15,3 +15,5 @@ services:
       - WDS_SOCKET_PORT=0  # WSL 2 네트워크 문제 해결
     stdin_open: true  # 터미널 상호작용 활성화 (선택)
     tty: true         # 터미널 출력 개선 (선택)
+    depends_on:
+      - backend
