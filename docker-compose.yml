@@ -2,6 +2,10 @@ services:
   db-mongo:
     image: mongo:latest
     container_name: database-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpw
+      MONGO_INITDB_DATABASE: mern_database
     ports:
       - "27017:27017" # host port : container port
     volumes:
