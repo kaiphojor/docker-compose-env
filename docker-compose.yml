@@ -1,8 +1,38 @@
 services:
-  react-app:
+  db-mongo:
+    image: mongo:latest
+    container_name: database-mongo
+    ports:
+      - "27017:27017" # host port : container port
+    volumes:
+      - mongo-data:/data/db # data 영속화위한 volume 연결
+    networks:
+      - network-docker-compose
+    restart: unless-stopped  # 컨테이너가 비정상 종료 시 재시작
+  # backend (express.js & node.js)
+  back-express:
+    build:
+      context: ./backend-express
+      dockerfile: Dockerfile
+    container_name: backend-express
+    ports:
+      - "5000:5000" # backend server port
+    environment:
+      - MONGO_URI=mongodb://db-mongo:27017/mern_database #MongoDB 연결 URI
+      - NODE_ENV=development  # 개발 환경 변수 (필요 시 production으로 변경)
+    depends_on: # service name. not container name
+      - db-mongo # mongo db 준비후 실행
+    networks:
+      - network-docker-compose
+    restart: unless-stopped  # 안정성 보장
+    volumes:
+      - ./backend-express:/app
+      - /app/node_modules # local node_modules 충돌 방지
+  front-react:
     build:
       context: ./frontend-react
       dockerfile: Dockerfile
+    container_name: frontend-react
     ports:
       - "3000:3000"
     volumes:
@@ -13,7 +43,20 @@ services:
       - CHOKIDAR_INTERVAL=100  # (선택) 폴링 간격(ms) 조정
       - WATCHPACK_POLLING=true
       - WDS_SOCKET_PORT=0  # WSL 2 네트워크 문제 해결
+      - REACT_APP_API_URL=http://localhost:5000  # 백엔드 API URL (프론트에서 사용)
+      # - REACT_APP_API_URL=http://backend-express:5000  # 백엔드 API URL (프론트에서 사용)
+    depends_on:
+      - back-express
+    networks:
+      - network-docker-compose
     stdin_open: true  # 터미널 상호작용 활성화 (선택)
     tty: true         # 터미널 출력 개선 (선택)
-    depends_on:
-      - backend
+    restart: unless-stopped  # 컨테이너가 비정상 종료 시 재시작
+volumes:
+  mongo-data:
+networks:
+  network-docker-compose:
+    driver: bridge
+  # networks:
+  # my_network:
+  #   driver: bridge
