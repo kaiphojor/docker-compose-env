@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB 연결
-const mongoURI = process.env.MONGO_URI || 'mongodb://db-mongo:27017/mern_database';
+const mongoURI = process.env.MONGO_URI || 'mongodb://root:rootpw@db-mongo:27017/mern_database?authSource=admin';
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB 연결 성공'))
   .catch(err => console.error('MongoDB 연결 실패:', err));

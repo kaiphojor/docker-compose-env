@@ -10,6 +10,7 @@ services:
       - "27017:27017" # host port : container port
     volumes:
       - mongo-data:/data/db # data 영속화위한 volume 연결
+      - ./mongo-init:/docker-entrypoint-initdb.d  # 초기화 스크립트 마운트
     networks:
       - network-docker-compose
     restart: unless-stopped  # 컨테이너가 비정상 종료 시 재시작
@@ -22,7 +23,7 @@ services:
     ports:
       - "5000:5000" # backend server port
     environment:
-      - MONGO_URI=mongodb://db-mongo:27017/mern_database #MongoDB 연결 URI
+      - MONGO_URI=mongodb://root:rootpw@db-mongo:27017/mern_database?authSource=admin #MongoDB 연결 URI
       - NODE_ENV=development  # 개발 환경 변수 (필요 시 production으로 변경)
     depends_on: # service name. not container name
       - db-mongo # mongo db 준비후 실행
