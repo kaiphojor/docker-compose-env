@@ -61,6 +61,3 @@ volumes:
 networks:
   network-docker-compose:
     driver: bridge
-  # networks:
-  # my_network:
-  #   driver: bridge
