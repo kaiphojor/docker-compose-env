@@ -1,3 +1,11 @@
+## docker compose build 및 실행
+## docker-compose up --build --force-recreate -d
+## 빌드 / 강제 재빌드 / daemon - background 실행
+## docker image 지우고 volume도 지우고
+## docker-compose down --rmi all -v  
+## container 삭제 / 사용된 image 모두 삭제 build image도 포함 / volume 삭제
+## mongodb://root:rootpw@localhost:27017/mern_database?authSource=admin
+## 외부 mongodbcompass에서 접근시 local의 mongod process가 중지된 상태에서 localhost에 접근. db-mongo는 내부 네트워크 소통용
 services:
   db-mongo:
     image: mongo:latest
@@ -11,6 +19,13 @@ services:
     volumes:
       - mongo-data:/data/db # data 영속화위한 volume 연결
       - ./mongo-init:/docker-entrypoint-initdb.d  # 초기화 스크립트 마운트
+      # - ./certs:/etc/ssl/certs
+    # command: >
+    #   mongod
+    #   --tlsMode requireTLS
+    #   --tlsCertificateKeyFile /etc/ssl/certs/mongodb.pem
+    #   --tlsCAFile /etc/ssl/certs/ca.pem
+      
     networks:
       - network-docker-compose
     restart: unless-stopped  # 컨테이너가 비정상 종료 시 재시작
@@ -24,6 +39,7 @@ services:
       - "5000:5000" # backend server port
     environment:
       - MONGO_URI=mongodb://root:rootpw@db-mongo:27017/mern_database?authSource=admin #MongoDB 연결 URI
+      # - MONGO_URI=mongodb://root:rootpw@db-mongo:27017/?authSource=admin #MongoDB 연결 URI
       - NODE_ENV=development  # 개발 환경 변수 (필요 시 production으로 변경)
     depends_on: # service name. not container name
       - db-mongo # mongo db 준비후 실행
