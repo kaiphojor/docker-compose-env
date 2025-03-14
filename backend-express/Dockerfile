@@ -13,4 +13,7 @@ COPY . .
 
 # 앱 실행
 EXPOSE 5000
-CMD ["npm", "start"]
+# 배포 모드
+# CMD ["npm", "start"]
+# 개발 모드 실행
+CMD ["npm", "run", "dev"]

@@ -49,6 +49,7 @@ services:
     volumes:
       - ./backend-express:/app
       - /app/node_modules # local node_modules 충돌 방지
+    command: ["npm", "run", "dev"] # nodemon 실행
   front-react:
     build:
       context: ./frontend-react
