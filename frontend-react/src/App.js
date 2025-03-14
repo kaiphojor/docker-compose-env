@@ -4,6 +4,7 @@ import './App.css';
 // import axios from 'axios';
 import Example from './Example';
 import DbConnectExample from './DbConnectExample';
+import ReadPost from './ReadPost';
 
 function App() {
   // useEffect(() => {
@@ -29,6 +30,9 @@ function App() {
         </a>
         <Example></Example>
         <DbConnectExample></DbConnectExample>
+        <ReadPost></ReadPost>
+        
+        
       </header>
     </div>
   );

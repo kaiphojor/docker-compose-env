@@ -20,7 +20,17 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true},
   createdAt: {type: Date, default: Date.now}
 });
-const User = mongoose.model('users',userSchema);
+
+const postSchema = new mongoose.Schema({
+  title: String,
+  content: String,
+  author: String,
+  createdAt: Date
+});
+
+const User = mongoose.model('User',userSchema);
+const Post = mongoose.model('Post', postSchema);
+
 
 const getUsers = async ()=>{
   try{
@@ -32,7 +42,7 @@ const getUsers = async ()=>{
   }
 } 
 
-// 기본 라우트
+// 기본 라우트 & 모든 user 가져오기
 app.get('/', async (req, res) => {
   try {
     let users = await getUsers();
@@ -42,6 +52,16 @@ app.get('/', async (req, res) => {
   }catch(err){
     console.error('조회 실패', err);
     res.status(500).json({message: 'server error', error:err.message});
+  }
+});
+
+// 모든 포스트 가져오기
+app.get('/posts', async (req, res) => {
+  try {
+    const posts = await Post.find(); // MongoDB에서 모든 포스트 가져오기
+    res.json(posts); // JSON 형식으로 응답
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching posts', error: err });
   }
 });
 
