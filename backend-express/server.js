@@ -65,6 +65,77 @@ app.get('/posts', async (req, res) => {
   }
 });
 
+// TODO 스키마 정의
+const todoSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String },
+  dueDate: { type: Date, required: true },
+  completed: { type: Boolean, default: false }
+});
+const Todo = mongoose.model('Todo', todoSchema);
+
+// CREATE: TODO 항목 추가
+app.post('/todos', async (req, res) => {
+  const { title, description, dueDate } = req.body;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const due = new Date(dueDate);
+  if (due < today) {
+    return res.status(400).json({ message: '마감일은 오늘 이전일 수 없습니다.' });
+  }
+  try {
+    const newTodo = new Todo({ title, description, dueDate });
+    await newTodo.save();
+    res.status(201).json(newTodo);
+  } catch (err) {
+    res.status(500).json({ message: 'TODO 생성 오류', error: err });
+  }
+});
+
+// READ: 모든 TODO 항목 조회
+app.get('/todos', async (req, res) => {
+  try {
+    const todos = await Todo.find();
+    res.json(todos);
+  } catch (err) {
+    res.status(500).json({ message: 'TODO 조회 오류', error: err });
+  }
+});
+
+// UPDATE: TODO 항목 수정
+app.put('/todos/:id', async (req, res) => {
+  const { id } = req.params;
+  const { title, description, dueDate, completed } = req.body;
+  try {
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      id,
+      { title, description, dueDate, completed },
+      { new: true }
+    );
+    if (!updatedTodo) {
+      return res.status(404).json({ message: 'TODO를 찾을 수 없습니다.' });
+    }
+    res.json(updatedTodo);
+  } catch (err) {
+    res.status(500).json({ message: 'TODO 수정 오류', error: err });
+  }
+});
+
+// DELETE: TODO 항목 삭제
+app.delete('/todos/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedTodo = await Todo.findByIdAndDelete(id);
+    if (!deletedTodo) {
+      return res.status(404).json({ message: 'TODO를 찾을 수 없습니다.' });
+    }
+    res.json({ message: 'TODO가 삭제되었습니다.' });
+  } catch (err) {
+    res.status(500).json({ message: 'TODO 삭제 오류', error: err });
+  }
+});
+
+
 // 서버 시작
 app.listen(PORT, () => {
   console.log(`서버가 ${PORT}번 포트에서 실행 중...`);

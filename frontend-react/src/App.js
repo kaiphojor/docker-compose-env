@@ -5,6 +5,7 @@ import './App.css';
 import Example from './components/Example';
 import ReadUser from './pages/ReadUser';
 import ReadPost from './pages/ReadPost';
+import TodoApp from './components/TodoApp';
 
 function App() {
   // useEffect(() => {
@@ -31,6 +32,7 @@ function App() {
         <Example></Example>
         <ReadUser></ReadUser>
         <ReadPost></ReadPost>
+        <TodoApp></TodoApp>
         
         
       </header>
