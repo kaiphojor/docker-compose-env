@@ -2,9 +2,9 @@
 import './App.css';
 // import React, { useEffect } from 'react';
 // import axios from 'axios';
-import Example from './Example';
-import DbConnectExample from './DbConnectExample';
-import ReadPost from './ReadPost';
+import Example from './components/Example';
+import ReadUser from './pages/ReadUser';
+import ReadPost from './pages/ReadPost';
 
 function App() {
   // useEffect(() => {
@@ -29,7 +29,7 @@ function App() {
         Learn something..
         </a>
         <Example></Example>
-        <DbConnectExample></DbConnectExample>
+        <ReadUser></ReadUser>
         <ReadPost></ReadPost>
         
         
